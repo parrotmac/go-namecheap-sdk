@@ -2,7 +2,7 @@ package namecheap
 
 import (
 	// "strconv"
-	// "strings"
+	"strings"
 	"testing"
 	// "github.com/motain/gocheck"
 )
@@ -40,6 +40,20 @@ func TestRecord__ReadRecord(t *testing.T) {
 
 // 	c.Assert(err, gocheck.IsNil)
 // }
+
+func TestRecord__UpdateRecordInvalid(t *testing.T) {
+	err := testClient.UpdateRecord("example.com", 0, &Record{
+		Name:       "foo",
+		Address:    "foo.corp.com",
+		RecordType: "CNAME",
+	})
+	if err == nil {
+		t.Error("expected error")
+	}
+	if !strings.Contains(err.Error(), "needs to end with a period") {
+		t.Errorf("unexpected error: %v", err)
+	}
+}
 
 // func (s *S) Test_UpdateRecord(c *gocheck.C) {
 // 	testServer.Response(200, nil, recordCreateExample)

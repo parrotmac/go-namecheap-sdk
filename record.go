@@ -3,6 +3,8 @@ package namecheap
 import (
 	"bytes"
 	"fmt"
+	"strings"
+
 	"github.com/hashicorp/terraform/helper/hashcode"
 )
 
@@ -34,6 +36,10 @@ func (c *Client) ReadRecord(domain string, hashId int) (*Record, error) {
 }
 
 func (c *Client) UpdateRecord(domain string, hashId int, record *Record) error {
+	if strings.EqualFold(record.RecordType, "CNAME") && !strings.HasSuffix(record.Address, ".") {
+		return fmt.Errorf("CNAME record to %s needs to end with a period '.'", record.Address)
+	}
+
 	allRecords, err := c.GetHosts(domain)
 	if err != nil {
 		return err
