@@ -1,6 +1,7 @@
 package syncretry
 
 import (
+	"context"
 	"errors"
 	"sync"
 	"time"
@@ -27,7 +28,7 @@ type SyncRetry struct {
 	options *Options
 }
 
-func (sq *SyncRetry) Do(f func() error) error {
+func (sq *SyncRetry) Do(ctx context.Context, f func() error) error {
 	err := f()
 	if err == nil {
 		return nil
@@ -41,7 +42,13 @@ func (sq *SyncRetry) Do(f func() error) error {
 	defer sq.m.Unlock()
 
 	for _, delay := range sq.options.Delays {
-		time.Sleep(time.Duration(delay) * time.Second)
+		select {
+		case <-time.After(time.Duration(delay) * time.Second):
+			break
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+
 		err = f()
 		if err == nil {
 			return nil
