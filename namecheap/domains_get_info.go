@@ -7,33 +7,33 @@ import (
 )
 
 type DomainsGetInfoResponse struct {
-	XMLName *xml.Name `xml:"ApiResponse"`
-	Errors  *[]struct {
-		Message *string `xml:",chardata"`
-		Number  *string `xml:"Number,attr"`
+	XMLName xml.Name `xml:"ApiResponse"`
+	Errors  []struct {
+		Message string `xml:",chardata"`
+		Number  string `xml:"Number,attr"`
 	} `xml:"Errors>Error"`
-	CommandResponse *DomainsGetInfoCommandResponse `xml:"CommandResponse"`
+	CommandResponse DomainsGetInfoCommandResponse `xml:"CommandResponse"`
 }
 
 type DomainsGetInfoCommandResponse struct {
-	DomainDNSGetListResult *DomainsGetInfoResult `xml:"DomainGetInfoResult"`
+	DomainDNSGetListResult DomainsGetInfoResult `xml:"DomainGetInfoResult"`
 }
 
 type DomainsGetInfoResult struct {
-	DomainName             *string                 `xml:"DomainName,attr"`
-	IsPremium              *bool                   `xml:"IsPremium,attr"`
-	PremiumDnsSubscription *PremiumDnsSubscription `xml:"PremiumDnsSubscription"`
-	DnsDetails             *DnsDetails             `xml:"DnsDetails"`
+	DomainName             string                 `xml:"DomainName,attr"`
+	IsPremium              bool                   `xml:"IsPremium,attr"`
+	PremiumDnsSubscription PremiumDnsSubscription `xml:"PremiumDnsSubscription"`
+	DnsDetails             DnsDetails             `xml:"DnsDetails"`
 }
 
 type PremiumDnsSubscription struct {
-	IsActive *bool `xml:"IsActive"`
+	IsActive bool `xml:"IsActive"`
 }
 
 type DnsDetails struct {
-	ProviderType  *string   `xml:"ProviderType,attr"`
-	IsUsingOurDNS *bool     `xml:"IsUsingOurDNS,attr"`
-	Nameservers   *[]string `xml:"Nameserver"`
+	ProviderType  string   `xml:"ProviderType,attr"`
+	IsUsingOurDNS bool     `xml:"IsUsingOurDNS,attr"`
+	Nameservers   []string `xml:"Nameserver"`
 }
 
 func (ds *DomainsService) GetInfo(ctx context.Context, domain string) (*DomainsGetInfoCommandResponse, error) {
@@ -49,11 +49,11 @@ func (ds *DomainsService) GetInfo(ctx context.Context, domain string) (*DomainsG
 	if err != nil {
 		return nil, err
 	}
-	if response.Errors != nil && len(*response.Errors) > 0 {
-		apiErr := (*response.Errors)[0]
+	if response.Errors != nil && len(response.Errors) > 0 {
+		apiErr := (response.Errors)[0]
 
-		return nil, fmt.Errorf("%s (%s)", *apiErr.Message, *apiErr.Number)
+		return nil, fmt.Errorf("%s (%s)", apiErr.Message, apiErr.Number)
 	}
 
-	return response.CommandResponse, nil
+	return &response.CommandResponse, nil
 }

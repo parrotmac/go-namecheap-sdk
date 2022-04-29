@@ -73,11 +73,11 @@ func TestDomainsGetList(t *testing.T) {
 		client.BaseURL = mockServer.URL
 
 		_, err := client.Domains.GetList(context.TODO(), &DomainsGetListArgs{
-			ListType:   String("EXPIRING"),
-			SearchTerm: String("search.com"),
-			Page:       Int(2),
-			PageSize:   Int(10),
-			SortBy:     String("EXPIREDATE_DESC"),
+			ListType:   "EXPIRING",
+			SearchTerm: "search.com",
+			Page:       2,
+			PageSize:   10,
+			SortBy:     "EXPIREDATE_DESC",
 		})
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
@@ -126,7 +126,7 @@ func TestDomainsGetList(t *testing.T) {
 		client.BaseURL = mockServer.URL
 
 		_, err := client.Domains.GetList(context.TODO(), &DomainsGetListArgs{
-			Page: Int(-1),
+			Page: -1,
 		})
 
 		assert.EqualError(t, err, "invalid Page value: -1, minimum value is 1")
@@ -142,7 +142,7 @@ func TestDomainsGetList(t *testing.T) {
 		client.BaseURL = mockServer.URL
 
 		_, err := client.Domains.GetList(context.TODO(), &DomainsGetListArgs{
-			PageSize: Int(3),
+			PageSize: 3,
 		})
 
 		assert.EqualError(t, err, "invalid PageSize value: 3, minimum value is 10, and maximum value is 100")
@@ -158,7 +158,7 @@ func TestDomainsGetList(t *testing.T) {
 		client.BaseURL = mockServer.URL
 
 		_, err := client.Domains.GetList(context.TODO(), &DomainsGetListArgs{
-			PageSize: Int(999),
+			PageSize: 999,
 		})
 
 		assert.EqualError(t, err, "invalid PageSize value: 999, minimum value is 10, and maximum value is 100")
@@ -183,34 +183,34 @@ func TestDomainsGetList(t *testing.T) {
 
 		expectedDomains := []Domain{
 			{
-				ID:         String("677625"),
-				Name:       String("domain.com"),
-				User:       String("user"),
-				Created:    &DateTime{createdDate},
-				Expires:    &DateTime{expiresDate},
-				IsExpired:  Bool(false),
-				IsLocked:   Bool(false),
-				AutoRenew:  Bool(true),
-				WhoisGuard: String("ENABLED"),
-				IsPremium:  Bool(false),
-				IsOurDNS:   Bool(false),
+				ID:         "677625",
+				Name:       "domain.com",
+				User:       "user",
+				Created:    DateTime{createdDate},
+				Expires:    DateTime{expiresDate},
+				IsExpired:  false,
+				IsLocked:   false,
+				AutoRenew:  true,
+				WhoisGuard: "ENABLED",
+				IsPremium:  false,
+				IsOurDNS:   false,
 			},
 			{
-				ID:         String("677626"),
-				Name:       String("domain2.net"),
-				User:       String("user"),
-				Created:    &DateTime{createdDate},
-				Expires:    &DateTime{expiresDate},
-				IsExpired:  Bool(false),
-				IsLocked:   Bool(false),
-				AutoRenew:  Bool(true),
-				WhoisGuard: String("ENABLED"),
-				IsPremium:  Bool(false),
-				IsOurDNS:   Bool(true),
+				ID:         "677626",
+				Name:       "domain2.net",
+				User:       "user",
+				Created:    DateTime{createdDate},
+				Expires:    DateTime{expiresDate},
+				IsExpired:  false,
+				IsLocked:   false,
+				AutoRenew:  true,
+				WhoisGuard: "ENABLED",
+				IsPremium:  false,
+				IsOurDNS:   true,
 			},
 		}
 
-		assert.Equal(t, &expectedDomains, response.Domains)
+		assert.Equal(t, expectedDomains, response.Domains)
 	})
 
 	t.Run("correct_parsing_paging", func(t *testing.T) {
@@ -228,12 +228,12 @@ func TestDomainsGetList(t *testing.T) {
 		}
 
 		expectedPaging := DomainsGetListPaging{
-			TotalItems:  Int(2),
-			CurrentPage: Int(1),
-			PageSize:    Int(20),
+			TotalItems:  2,
+			CurrentPage: 1,
+			PageSize:    20,
 		}
 
-		assert.Equal(t, &expectedPaging, response.Paging)
+		assert.Equal(t, expectedPaging, response.Paging)
 	})
 
 	t.Run("empty_domain_list", func(t *testing.T) {

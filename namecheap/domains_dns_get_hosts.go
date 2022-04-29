@@ -12,36 +12,36 @@ type DomainsDNSGetHostsResponse struct {
 		Message string `xml:",chardata"`
 		Number  string `xml:"Number,attr"`
 	} `xml:"Errors>Error"`
-	CommandResponse *DomainsDNSGetHostsCommandResponse `xml:"CommandResponse"`
+	CommandResponse DomainsDNSGetHostsCommandResponse `xml:"CommandResponse"`
 }
 
 type DomainsDNSGetHostsCommandResponse struct {
-	DomainDNSGetHostsResult *DomainDNSGetHostsResult `xml:"DomainDNSGetHostsResult"`
+	DomainDNSGetHostsResult DomainDNSGetHostsResult `xml:"DomainDNSGetHostsResult"`
 }
 
 type DomainDNSGetHostsResult struct {
-	Domain        *string                         `xml:"Domain,attr"`
-	EmailType     *string                         `xml:"EmailType,attr"`
-	IsUsingOurDNS *bool                           `xml:"IsUsingOurDNS,attr"`
-	Hosts         *[]DomainsDNSHostRecordDetailed `xml:"host"`
+	Domain        string                         `xml:"Domain,attr"`
+	EmailType     string                         `xml:"EmailType,attr"`
+	IsUsingOurDNS bool                           `xml:"IsUsingOurDNS,attr"`
+	Hosts         []DomainsDNSHostRecordDetailed `xml:"host"`
 }
 
 type DomainsDNSHostRecordDetailed struct {
-	HostId             *int    `xml:"HostId,attr"`
-	Name               *string `xml:"Name,attr"`
-	Type               *string `xml:"Type,attr"`
-	Address            *string `xml:"Address,attr"`
-	MXPref             *int    `xml:"MXPref,attr"`
-	TTL                *int    `xml:"TTL,attr"`
-	AssociatedAppTitle *string `xml:"AssociatedAppTitle,attr"`
-	FriendlyName       *string `xml:"FriendlyName,attr"`
-	IsActive           *bool   `xml:"IsActive,attr"`
-	IsDDNSEnabled      *bool   `xml:"IsDDNSEnabled,attr"`
+	HostId             int    `xml:"HostId,attr"`
+	Name               string `xml:"Name,attr"`
+	Type               string `xml:"Type,attr"`
+	Address            string `xml:"Address,attr"`
+	MXPref             int    `xml:"MXPref,attr"`
+	TTL                int    `xml:"TTL,attr"`
+	AssociatedAppTitle string `xml:"AssociatedAppTitle,attr"`
+	FriendlyName       string `xml:"FriendlyName,attr"`
+	IsActive           bool   `xml:"IsActive,attr"`
+	IsDDNSEnabled      bool   `xml:"IsDDNSEnabled,attr"`
 }
 
 func (d DomainsDNSHostRecordDetailed) String() string {
 	return fmt.Sprintf("{HostId: %d, Name: %s, Type: %s, Address: %s, MXPref: %d, TTL: %d, AssociatedAppTitle: %s, FriendlyName: %s, IsActive: %t, IsDDNSEnabled: %t}",
-		*d.HostId, *d.Name, *d.Type, *d.Address, *d.MXPref, *d.TTL, *d.AssociatedAppTitle, *d.FriendlyName, *d.IsActive, *d.IsDDNSEnabled)
+		d.HostId, d.Name, d.Type, d.Address, d.MXPref, d.TTL, d.AssociatedAppTitle, d.FriendlyName, d.IsActive, d.IsDDNSEnabled)
 }
 
 // GetHosts retrieves DNS host record settings for the requested domain.
@@ -71,5 +71,5 @@ func (dds *DomainsDNSService) GetHosts(ctx context.Context, domain string) (*Dom
 		return nil, fmt.Errorf("%s (%s)", apiErr.Message, apiErr.Number)
 	}
 
-	return response.CommandResponse, nil
+	return &response.CommandResponse, nil
 }

@@ -104,9 +104,9 @@ func TestDomainsDNSGetHosts(t *testing.T) {
 			t.Fatal("Unable to get domains", err)
 		}
 
-		assert.Equal(t, "domain.net", *response.DomainDNSGetHostsResult.Domain)
-		assert.Equal(t, "MX", *response.DomainDNSGetHostsResult.EmailType)
-		assert.Equal(t, true, *response.DomainDNSGetHostsResult.IsUsingOurDNS)
+		assert.Equal(t, "domain.net", response.DomainDNSGetHostsResult.Domain)
+		assert.Equal(t, "MX", response.DomainDNSGetHostsResult.EmailType)
+		assert.Equal(t, true, response.DomainDNSGetHostsResult.IsUsingOurDNS)
 	})
 
 	t.Run("correct_parsing_list", func(t *testing.T) {
@@ -125,32 +125,32 @@ func TestDomainsDNSGetHosts(t *testing.T) {
 
 		expectedList := []DomainsDNSHostRecordDetailed{
 			{
-				HostId:             Int(877748),
-				Name:               String("host33"),
-				Type:               String("MX"),
-				Address:            String("addr.domain.com."),
-				MXPref:             Int(10),
-				TTL:                Int(1800),
-				AssociatedAppTitle: String(""),
-				FriendlyName:       String(""),
-				IsActive:           Bool(true),
-				IsDDNSEnabled:      Bool(false),
+				HostId:             877748,
+				Name:               "host33",
+				Type:               "MX",
+				Address:            "addr.domain.com.",
+				MXPref:             10,
+				TTL:                1800,
+				AssociatedAppTitle: "",
+				FriendlyName:       "",
+				IsActive:           true,
+				IsDDNSEnabled:      false,
 			},
 			{
-				HostId:             Int(877749),
-				Name:               String("@"),
-				Type:               String("CNAME"),
-				Address:            String("anotherdomain.com"),
-				MXPref:             Int(10),
-				TTL:                Int(1800),
-				AssociatedAppTitle: String(""),
-				FriendlyName:       String(""),
-				IsActive:           Bool(true),
-				IsDDNSEnabled:      Bool(false),
+				HostId:             877749,
+				Name:               "@",
+				Type:               "CNAME",
+				Address:            "anotherdomain.com",
+				MXPref:             10,
+				TTL:                1800,
+				AssociatedAppTitle: "",
+				FriendlyName:       "",
+				IsActive:           true,
+				IsDDNSEnabled:      false,
 			},
 		}
 
-		assert.Equal(t, &expectedList, response.DomainDNSGetHostsResult.Hosts)
+		assert.Equal(t, expectedList, response.DomainDNSGetHostsResult.Hosts)
 	})
 
 	t.Run("empty_record_list", func(t *testing.T) {

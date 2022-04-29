@@ -7,29 +7,29 @@ import (
 )
 
 type DomainsDNSGetListResponse struct {
-	XMLName *xml.Name `xml:"ApiResponse"`
-	Errors  *[]struct {
-		Message *string `xml:",chardata"`
-		Number  *string `xml:"Number,attr"`
+	XMLName xml.Name `xml:"ApiResponse"`
+	Errors  []struct {
+		Message string `xml:",chardata"`
+		Number  string `xml:"Number,attr"`
 	} `xml:"Errors>Error"`
-	CommandResponse *DomainsDNSGetListCommandResponse `xml:"CommandResponse"`
+	CommandResponse DomainsDNSGetListCommandResponse `xml:"CommandResponse"`
 }
 
 type DomainsDNSGetListCommandResponse struct {
-	DomainDNSGetListResult *DomainDNSGetListResult `xml:"DomainDNSGetListResult"`
+	DomainDNSGetListResult DomainDNSGetListResult `xml:"DomainDNSGetListResult"`
 }
 
 type DomainDNSGetListResult struct {
-	Domain         *string   `xml:"Domain,attr"`
-	IsUsingOurDNS  *bool     `xml:"IsUsingOurDNS,attr"`
-	IsPremiumDNS   *bool     `xml:"IsPremiumDNS,attr"`
-	IsUsingFreeDNS *bool     `xml:"IsUsingFreeDNS,attr"`
-	Nameservers    *[]string `xml:"Nameserver"`
+	Domain         string   `xml:"Domain,attr"`
+	IsUsingOurDNS  bool     `xml:"IsUsingOurDNS,attr"`
+	IsPremiumDNS   bool     `xml:"IsPremiumDNS,attr"`
+	IsUsingFreeDNS bool     `xml:"IsUsingFreeDNS,attr"`
+	Nameservers    []string `xml:"Nameserver"`
 }
 
 func (d DomainDNSGetListResult) String() string {
 	return fmt.Sprintf("{Domain: %s, IsUsingOurDNS: %t, IsPremiumDNS: %t, IsUsingFreeDNS: %t, Nameservers: %v}",
-		*d.Domain, *d.IsUsingOurDNS, *d.IsPremiumDNS, *d.IsUsingFreeDNS, *d.Nameservers,
+		d.Domain, d.IsUsingOurDNS, d.IsPremiumDNS, d.IsUsingFreeDNS, d.Nameservers,
 	)
 }
 
@@ -55,11 +55,11 @@ func (dds *DomainsDNSService) GetList(ctx context.Context, domain string) (*Doma
 	if err != nil {
 		return nil, err
 	}
-	if response.Errors != nil && len(*response.Errors) > 0 {
-		apiErr := (*response.Errors)[0]
+	if response.Errors != nil && len(response.Errors) > 0 {
+		apiErr := (response.Errors)[0]
 
-		if *apiErr.Number != "2019166" {
-			return nil, fmt.Errorf("%s (%s)", *apiErr.Message, *apiErr.Number)
+		if apiErr.Number != "2019166" {
+			return nil, fmt.Errorf("%s (%s)", apiErr.Message, apiErr.Number)
 		}
 
 		var domainInfo *DomainsGetInfoCommandResponse
@@ -68,18 +68,18 @@ func (dds *DomainsDNSService) GetList(ctx context.Context, domain string) (*Doma
 			return nil, err
 		}
 
-		IsUsingFreeDNS := *domainInfo.DomainDNSGetListResult.DnsDetails.ProviderType == "FreeDNS"
+		IsUsingFreeDNS := domainInfo.DomainDNSGetListResult.DnsDetails.ProviderType == "FreeDNS"
 
 		return &DomainsDNSGetListCommandResponse{
-			DomainDNSGetListResult: &DomainDNSGetListResult{
+			DomainDNSGetListResult: DomainDNSGetListResult{
 				Domain:         domainInfo.DomainDNSGetListResult.DomainName,
 				IsUsingOurDNS:  domainInfo.DomainDNSGetListResult.DnsDetails.IsUsingOurDNS,
 				IsPremiumDNS:   domainInfo.DomainDNSGetListResult.PremiumDnsSubscription.IsActive,
-				IsUsingFreeDNS: &IsUsingFreeDNS,
+				IsUsingFreeDNS: IsUsingFreeDNS,
 				Nameservers:    domainInfo.DomainDNSGetListResult.DnsDetails.Nameservers,
 			},
 		}, nil
 	}
 
-	return response.CommandResponse, nil
+	return &response.CommandResponse, nil
 }
