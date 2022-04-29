@@ -6,8 +6,10 @@ import (
 	"time"
 )
 
-var RetryError = errors.New("retry error")
-var RetryAttemptsError = errors.New("retry attempts error")
+var (
+	RetryError         = errors.New("retry error")
+	RetryAttemptsError = errors.New("retry attempts error")
+)
 
 type Options struct {
 	Delays []int

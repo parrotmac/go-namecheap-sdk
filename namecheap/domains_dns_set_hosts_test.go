@@ -1,12 +1,14 @@
 package namecheap
 
 import (
-	"github.com/stretchr/testify/assert"
+	"context"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDomainsDNSSetHosts(t *testing.T) {
@@ -41,7 +43,7 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.DomainsDNS.SetHosts(&DomainsDNSSetHostsArgs{
+		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
 			Domain: String("domain.net"),
 		})
 		if err != nil {
@@ -65,7 +67,7 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.DomainsDNS.SetHosts(&DomainsDNSSetHostsArgs{
+		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
 			Domain:    String("domain.net"),
 			EmailType: String(EmailTypeForward),
 			Flag:      UInt8(100),
@@ -96,7 +98,7 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.DomainsDNS.SetHosts(&DomainsDNSSetHostsArgs{
+		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
 			Domain:    String("domain.net"),
 			EmailType: String("MX"),
 			Records: &[]DomainsDNSHostRecord{
@@ -145,7 +147,7 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.DomainsDNS.SetHosts(&DomainsDNSSetHostsArgs{
+		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
 			Domain:    String("domain.net"),
 			EmailType: String(EmailTypeMXE),
 			Records: &[]DomainsDNSHostRecord{
@@ -183,7 +185,7 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.DomainsDNS.SetHosts(&DomainsDNSSetHostsArgs{
+		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
 			Domain: String("domain.net"),
 			Records: &[]DomainsDNSHostRecord{
 				{
@@ -216,7 +218,7 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.DomainsDNS.SetHosts(&DomainsDNSSetHostsArgs{
+		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
 			Domain: String("domain.net"),
 			Records: &[]DomainsDNSHostRecord{
 				{
@@ -249,7 +251,7 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.DomainsDNS.SetHosts(&DomainsDNSSetHostsArgs{
+		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
 			Domain: String("domain.net"),
 			Records: &[]DomainsDNSHostRecord{
 				{
@@ -282,7 +284,7 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.DomainsDNS.SetHosts(&DomainsDNSSetHostsArgs{
+		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
 			Domain: String("domain.net"),
 			Records: &[]DomainsDNSHostRecord{
 				{
@@ -528,7 +530,7 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 			client := setupClient(nil)
 			client.BaseURL = mockServer.URL
 
-			_, err := client.DomainsDNS.SetHosts(errorCase.Args)
+			_, err := client.DomainsDNS.SetHosts(context.TODO(), errorCase.Args)
 
 			assert.EqualError(t, err, errorCase.ExpectedError)
 		})

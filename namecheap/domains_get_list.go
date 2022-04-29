@@ -1,6 +1,7 @@
 package namecheap
 
 import (
+	"context"
 	"encoding/xml"
 	"fmt"
 	"strconv"
@@ -72,7 +73,7 @@ type DomainsGetListArgs struct {
 // In this case revert to the official documentation to check defaults
 //
 // Namecheap doc: https://www.namecheap.com/support/api/methods/domains/get-list/
-func (ds *DomainsService) GetList(args *DomainsGetListArgs) (*DomainsGetListCommandResponse, error) {
+func (ds *DomainsService) GetList(ctx context.Context, args *DomainsGetListArgs) (*DomainsGetListCommandResponse, error) {
 	var domainsResponse DomainsGetListResponse
 	params := map[string]string{
 		"Command": "namecheap.domains.getList",
@@ -89,7 +90,7 @@ func (ds *DomainsService) GetList(args *DomainsGetListArgs) (*DomainsGetListComm
 		params[k] = v
 	}
 
-	_, err = ds.client.DoXML(params, &domainsResponse)
+	_, err = ds.client.DoXML(ctx, params, &domainsResponse)
 	if err != nil {
 		return nil, err
 	}

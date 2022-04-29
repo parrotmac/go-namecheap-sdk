@@ -1,6 +1,7 @@
 package namecheap
 
 import (
+	"context"
 	"encoding/xml"
 	"fmt"
 )
@@ -31,7 +32,7 @@ func (d DomainDNSSetDefaultResult) String() string {
 // Required for free services like Host record management, URL forwarding, email forwarding, dynamic dns and other value added services.
 //
 // Namecheap doc: https://www.namecheap.com/support/api/methods/domains-dns/set-default/
-func (dds *DomainsDNSService) SetDefault(domain string) (*DomainsDNSSetDefaultCommandResponse, error) {
+func (dds *DomainsDNSService) SetDefault(ctx context.Context, domain string) (*DomainsDNSSetDefaultCommandResponse, error) {
 	var response DomainsDNSSetDefaultResponse
 
 	params := map[string]string{
@@ -46,7 +47,7 @@ func (dds *DomainsDNSService) SetDefault(domain string) (*DomainsDNSSetDefaultCo
 	params["SLD"] = parsedDomain.SLD
 	params["TLD"] = parsedDomain.TLD
 
-	_, err = dds.client.DoXML(params, &response)
+	_, err = dds.client.DoXML(ctx, params, &response)
 	if err != nil {
 		return nil, err
 	}

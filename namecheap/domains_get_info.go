@@ -1,6 +1,7 @@
 package namecheap
 
 import (
+	"context"
 	"encoding/xml"
 	"fmt"
 )
@@ -35,7 +36,7 @@ type DnsDetails struct {
 	Nameservers   *[]string `xml:"Nameserver"`
 }
 
-func (ds *DomainsService) GetInfo(domain string) (*DomainsGetInfoCommandResponse, error) {
+func (ds *DomainsService) GetInfo(ctx context.Context, domain string) (*DomainsGetInfoCommandResponse, error) {
 	var response DomainsGetInfoResponse
 
 	params := map[string]string{
@@ -44,7 +45,7 @@ func (ds *DomainsService) GetInfo(domain string) (*DomainsGetInfoCommandResponse
 		"HostName":   domain,
 	}
 
-	_, err := ds.client.DoXML(params, &response)
+	_, err := ds.client.DoXML(ctx, params, &response)
 	if err != nil {
 		return nil, err
 	}

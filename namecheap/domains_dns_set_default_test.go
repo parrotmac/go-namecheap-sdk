@@ -1,12 +1,14 @@
 package namecheap
 
 import (
-	"github.com/stretchr/testify/assert"
+	"context"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDomainsDNSSetDefault(t *testing.T) {
@@ -37,7 +39,7 @@ func TestDomainsDNSSetDefault(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.DomainsDNS.SetDefault("domain.net")
+		_, err := client.DomainsDNS.SetDefault(context.TODO(), "domain.net")
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
 		}
@@ -59,7 +61,7 @@ func TestDomainsDNSSetDefault(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.DomainsDNS.SetDefault("domain.net")
+		_, err := client.DomainsDNS.SetDefault(context.TODO(), "domain.net")
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
 		}
@@ -77,7 +79,7 @@ func TestDomainsDNSSetDefault(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		result, err := client.DomainsDNS.SetDefault("domain.net")
+		result, err := client.DomainsDNS.SetDefault(context.TODO(), "domain.net")
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
 		}
