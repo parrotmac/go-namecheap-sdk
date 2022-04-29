@@ -7,46 +7,48 @@ import (
 	"strconv"
 )
 
-var allowedListTypeValues = []string{"ALL", "EXPIRING", "EXPIRED"}
-var allowedSortByValues = []string{"NAME", "NAME_DESC", "EXPIREDATE", "EXPIREDATE_DESC", "CREATEDATE", "CREATEDATE_DESC"}
+var (
+	allowedListTypeValues = []string{"ALL", "EXPIRING", "EXPIRED"}
+	allowedSortByValues   = []string{"NAME", "NAME_DESC", "EXPIREDATE", "EXPIREDATE_DESC", "CREATEDATE", "CREATEDATE_DESC"}
+)
 
 type DomainsGetListResponse struct {
-	XMLName *xml.Name `xml:"ApiResponse"`
-	Errors  *[]struct {
-		Message *string `xml:",chardata"`
-		Number  *string `xml:"Number,attr"`
+	XMLName xml.Name `xml:"ApiResponse"`
+	Errors  []struct {
+		Message string `xml:",chardata"`
+		Number  string `xml:"Number,attr"`
 	} `xml:"Errors>Error"`
 	CommandResponse *DomainsGetListCommandResponse `xml:"CommandResponse"`
 }
 
 type DomainsGetListCommandResponse struct {
-	Domains *[]Domain             `xml:"DomainGetListResult>Domain"`
-	Paging  *DomainsGetListPaging `xml:"Paging"`
+	Domains []Domain             `xml:"DomainGetListResult>Domain"`
+	Paging  DomainsGetListPaging `xml:"Paging"`
 }
 
 type DomainsGetListPaging struct {
-	TotalItems  *int `xml:"TotalItems"`
-	CurrentPage *int `xml:"CurrentPage"`
-	PageSize    *int `xml:"PageSize"`
+	TotalItems  int `xml:"TotalItems"`
+	CurrentPage int `xml:"CurrentPage"`
+	PageSize    int `xml:"PageSize"`
 }
 
 type Domain struct {
-	ID         *string   `xml:"ID,attr"`
-	Name       *string   `xml:"Name,attr"`
-	User       *string   `xml:"User,attr"`
-	Created    *DateTime `xml:"Created,attr"`
-	Expires    *DateTime `xml:"Expires,attr"`
-	IsExpired  *bool     `xml:"IsExpired,attr"`
-	IsLocked   *bool     `xml:"IsLocked,attr"`
-	AutoRenew  *bool     `xml:"AutoRenew,attr"`
-	WhoisGuard *string   `xml:"WhoisGuard,attr"`
-	IsPremium  *bool     `xml:"IsPremium,attr"`
-	IsOurDNS   *bool     `xml:"IsOurDNS,attr"`
+	ID         string   `xml:"ID,attr"`
+	Name       string   `xml:"Name,attr"`
+	User       string   `xml:"User,attr"`
+	Created    DateTime `xml:"Created,attr"`
+	Expires    DateTime `xml:"Expires,attr"`
+	IsExpired  bool     `xml:"IsExpired,attr"`
+	IsLocked   bool     `xml:"IsLocked,attr"`
+	AutoRenew  bool     `xml:"AutoRenew,attr"`
+	WhoisGuard string   `xml:"WhoisGuard,attr"`
+	IsPremium  bool     `xml:"IsPremium,attr"`
+	IsOurDNS   bool     `xml:"IsOurDNS,attr"`
 }
 
 func (d Domain) String() string {
 	return fmt.Sprintf("{ID: %s, Name: %s, User: %s, Created: %s, Expires: %s, IsExpired: %t, IsLocked: %t, AutoRenew: %t, WhoisGuard: %s, IsPremium: %t, IsOurDNS: %t}",
-		*d.ID, *d.Name, *d.User, *d.Created, d.Expires.Time, *d.IsExpired, *d.IsLocked, *d.AutoRenew, *d.WhoisGuard, *d.IsPremium, *d.IsOurDNS)
+		d.ID, d.Name, d.User, d.Created, d.Expires.Time, d.IsExpired, d.IsLocked, d.AutoRenew, d.WhoisGuard, d.IsPremium, d.IsOurDNS)
 }
 
 // DomainsGetListArgs struct is an input arguments for Client.DomainsGetList function
@@ -54,17 +56,17 @@ func (d Domain) String() string {
 type DomainsGetListArgs struct {
 	// Possible values are ALL, EXPIRING, or EXPIRED
 	// Default Value: ALL
-	ListType *string
+	ListType string
 	// Keyword to look for in the domain list
-	SearchTerm *string
+	SearchTerm string
 	// Page to return
 	// Default value: 1
-	Page *int
+	Page int
 	// Number of domains to be listed on a page. Minimum value is 10, and maximum value is 100.
 	// Default value: 20
-	PageSize *int
+	PageSize int
 	// Possible values are NAME, NAME_DESC, EXPIREDATE, EXPIREDATE_DESC, CREATEDATE, CREATEDATE_DESC
-	SortBy *string
+	SortBy string
 }
 
 // GetList returns a list of domains for the particular user
@@ -94,9 +96,9 @@ func (ds *DomainsService) GetList(ctx context.Context, args *DomainsGetListArgs)
 	if err != nil {
 		return nil, err
 	}
-	if domainsResponse.Errors != nil && len(*domainsResponse.Errors) > 0 {
-		apiErr := (*domainsResponse.Errors)[0]
-		return nil, fmt.Errorf("%s (%s)", *apiErr.Message, *apiErr.Number)
+	if domainsResponse.Errors != nil && len(domainsResponse.Errors) > 0 {
+		apiErr := (domainsResponse.Errors)[0]
+		return nil, fmt.Errorf("%s (%s)", apiErr.Message, apiErr.Number)
 	}
 
 	return domainsResponse.CommandResponse, nil
@@ -109,40 +111,40 @@ func parseDomainsGetListArgs(args *DomainsGetListArgs) (*map[string]string, erro
 		return &params, nil
 	}
 
-	if args.ListType != nil {
-		if isValidListType(*args.ListType) {
-			params["ListType"] = *args.ListType
+	if args.ListType != "" {
+		if isValidListType(args.ListType) {
+			params["ListType"] = args.ListType
 		} else {
-			return nil, fmt.Errorf("invalid ListType value: %s", *args.ListType)
+			return nil, fmt.Errorf("invalid ListType value: %s", args.ListType)
 		}
 	}
 
-	if args.SortBy != nil {
-		if isValidSortBy(*args.SortBy) {
-			params["SortBy"] = *args.SortBy
+	if args.SortBy != "" {
+		if isValidSortBy(args.SortBy) {
+			params["SortBy"] = args.SortBy
 		} else {
-			return nil, fmt.Errorf("invalid SortBy value: %s", *args.SortBy)
+			return nil, fmt.Errorf("invalid SortBy value: %s", args.SortBy)
 		}
 	}
 
-	if args.Page != nil {
-		if *args.Page > 0 {
-			params["Page"] = strconv.Itoa(*args.Page)
+	if args.Page != 0 {
+		if args.Page > 0 {
+			params["Page"] = strconv.Itoa(args.Page)
 		} else {
-			return nil, fmt.Errorf("invalid Page value: %d, minimum value is 1", *args.Page)
+			return nil, fmt.Errorf("invalid Page value: %d, minimum value is 1", args.Page)
 		}
 	}
 
-	if args.PageSize != nil {
-		if *args.PageSize >= 10 && *args.PageSize <= 100 {
-			params["PageSize"] = strconv.Itoa(*args.PageSize)
+	if args.PageSize != 0 {
+		if args.PageSize >= 10 && args.PageSize <= 100 {
+			params["PageSize"] = strconv.Itoa(args.PageSize)
 		} else {
-			return nil, fmt.Errorf("invalid PageSize value: %d, minimum value is 10, and maximum value is 100", *args.PageSize)
+			return nil, fmt.Errorf("invalid PageSize value: %d, minimum value is 10, and maximum value is 100", args.PageSize)
 		}
 	}
 
-	if args.SearchTerm != nil {
-		params["SearchTerm"] = *args.SearchTerm
+	if args.SearchTerm != "" {
+		params["SearchTerm"] = args.SearchTerm
 	}
 
 	return &params, nil

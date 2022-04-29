@@ -87,10 +87,10 @@ func TestDomainsDNSGetList(t *testing.T) {
 			t.Fatal("Unable to get domains", err)
 		}
 
-		assert.Equal(t, false, *result.DomainDNSGetListResult.IsUsingFreeDNS)
-		assert.Equal(t, false, *result.DomainDNSGetListResult.IsPremiumDNS)
-		assert.Equal(t, true, *result.DomainDNSGetListResult.IsUsingOurDNS)
-		assert.Equal(t, "domain.net", *result.DomainDNSGetListResult.Domain)
+		assert.Equal(t, false, result.DomainDNSGetListResult.IsUsingFreeDNS)
+		assert.Equal(t, false, result.DomainDNSGetListResult.IsPremiumDNS)
+		assert.Equal(t, true, result.DomainDNSGetListResult.IsUsingOurDNS)
+		assert.Equal(t, "domain.net", result.DomainDNSGetListResult.Domain)
 	})
 
 	t.Run("correct_parsing_list", func(t *testing.T) {
@@ -107,8 +107,7 @@ func TestDomainsDNSGetList(t *testing.T) {
 			t.Fatal("Unable to get domains", err)
 		}
 
-		expectedNameservers := &[]string{"dns1.registrar-servers.com", "dns2.registrar-servers.com"}
-
+		expectedNameservers := []string{"dns1.registrar-servers.com", "dns2.registrar-servers.com"}
 		assert.Equal(t, expectedNameservers, result.DomainDNSGetListResult.Nameservers)
 	})
 
@@ -213,12 +212,12 @@ func TestDomainsDNSGetList(t *testing.T) {
 			t.Fatal("Unable to get domains", err)
 		}
 
-		assert.Equal(t, true, *result.DomainDNSGetListResult.IsUsingFreeDNS)
-		assert.Equal(t, false, *result.DomainDNSGetListResult.IsPremiumDNS)
-		assert.Equal(t, true, *result.DomainDNSGetListResult.IsUsingOurDNS)
-		assert.Equal(t, "horse-family.com.ua", *result.DomainDNSGetListResult.Domain)
+		assert.Equal(t, true, result.DomainDNSGetListResult.IsUsingFreeDNS)
+		assert.Equal(t, false, result.DomainDNSGetListResult.IsPremiumDNS)
+		assert.Equal(t, true, result.DomainDNSGetListResult.IsUsingOurDNS)
+		assert.Equal(t, "horse-family.com.ua", result.DomainDNSGetListResult.Domain)
 
-		expectedNameservers := &[]string{"freedns1.registrar-servers.com", "freedns2.registrar-servers.com"}
+		expectedNameservers := []string{"freedns1.registrar-servers.com", "freedns2.registrar-servers.com"}
 		assert.Equal(t, expectedNameservers, result.DomainDNSGetListResult.Nameservers)
 	})
 }

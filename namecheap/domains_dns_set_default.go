@@ -7,25 +7,25 @@ import (
 )
 
 type DomainsDNSSetDefaultResponse struct {
-	XMLName *xml.Name `xml:"ApiResponse"`
-	Errors  *[]struct {
-		Message *string `xml:",chardata"`
-		Number  *string `xml:"Number,attr"`
+	XMLName xml.Name `xml:"ApiResponse"`
+	Errors  []struct {
+		Message string `xml:",chardata"`
+		Number  string `xml:"Number,attr"`
 	} `xml:"Errors>Error"`
-	CommandResponse *DomainsDNSSetDefaultCommandResponse `xml:"CommandResponse"`
+	CommandResponse DomainsDNSSetDefaultCommandResponse `xml:"CommandResponse"`
 }
 
 type DomainsDNSSetDefaultCommandResponse struct {
-	DomainDNSSetDefaultResult *DomainDNSSetDefaultResult `xml:"DomainDNSSetDefaultResult"`
+	DomainDNSSetDefaultResult DomainDNSSetDefaultResult `xml:"DomainDNSSetDefaultResult"`
 }
 
 type DomainDNSSetDefaultResult struct {
-	Domain  *string `xml:"Domain,attr"`
-	Updated *bool   `xml:"Updated,attr"`
+	Domain  string `xml:"Domain,attr"`
+	Updated bool   `xml:"Updated,attr"`
 }
 
 func (d DomainDNSSetDefaultResult) String() string {
-	return fmt.Sprintf("{Domain: %s, Updated: %t}", *d.Domain, *d.Updated)
+	return fmt.Sprintf("{Domain: %s, Updated: %t}", d.Domain, d.Updated)
 }
 
 // SetDefault sets domain to use our default DNS servers.
@@ -51,10 +51,10 @@ func (dds *DomainsDNSService) SetDefault(ctx context.Context, domain string) (*D
 	if err != nil {
 		return nil, err
 	}
-	if response.Errors != nil && len(*response.Errors) > 0 {
-		apiErr := (*response.Errors)[0]
-		return nil, fmt.Errorf("%s (%s)", *apiErr.Message, *apiErr.Number)
+	if response.Errors != nil && len(response.Errors) > 0 {
+		apiErr := response.Errors[0]
+		return nil, fmt.Errorf("%s (%s)", apiErr.Message, apiErr.Number)
 	}
 
-	return response.CommandResponse, nil
+	return &response.CommandResponse, nil
 }

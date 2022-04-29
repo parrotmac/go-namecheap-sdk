@@ -112,8 +112,8 @@ func TestDomainsDNSSetCustom(t *testing.T) {
 			t.Fatal("Unable to get domains", err)
 		}
 
-		assert.Equal(t, "domain.net", *result.DomainDNSSetCustomResult.Domain)
-		assert.Equal(t, true, *result.DomainDNSSetCustomResult.Updated)
+		assert.Equal(t, "domain.net", result.DomainDNSSetCustomResult.Domain)
+		assert.Equal(t, true, result.DomainDNSSetCustomResult.Updated)
 	})
 
 	errorCases := []struct {

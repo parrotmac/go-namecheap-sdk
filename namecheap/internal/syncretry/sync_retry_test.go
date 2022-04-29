@@ -1,11 +1,13 @@
 package syncretry
 
 import (
+	"context"
 	"errors"
-	"github.com/stretchr/testify/assert"
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var testRetryDelays = []int{1, 2, 3}
@@ -22,7 +24,7 @@ func TestSyncRetry_Do(t *testing.T) {
 		sr := NewSyncRetry(&Options{testRetryDelays})
 		done := false
 
-		err := sr.Do(func() error {
+		err := sr.Do(context.TODO(), func() error {
 			done = true
 			return nil
 		})
@@ -35,12 +37,12 @@ func TestSyncRetry_Do(t *testing.T) {
 		sr := NewSyncRetry(&Options{testRetryDelays})
 		done := 0
 
-		err1 := sr.Do(func() error {
+		err1 := sr.Do(context.TODO(), func() error {
 			done++
 			return nil
 		})
 
-		err2 := sr.Do(func() error {
+		err2 := sr.Do(context.TODO(), func() error {
 			done++
 			return nil
 		})
@@ -54,7 +56,7 @@ func TestSyncRetry_Do(t *testing.T) {
 		testError := errors.New("test error")
 		sr := NewSyncRetry(&Options{testRetryDelays})
 
-		err := sr.Do(func() error {
+		err := sr.Do(context.TODO(), func() error {
 			return testError
 		})
 
@@ -70,7 +72,7 @@ func TestSyncRetry_Do(t *testing.T) {
 		secondDone := make(chan error)
 
 		go func() {
-			err := sr.Do(func() error {
+			err := sr.Do(context.TODO(), func() error {
 				atomic.AddInt32(&done, 1)
 				time.Sleep(time.Millisecond * time.Duration(200))
 				return nil
@@ -80,7 +82,7 @@ func TestSyncRetry_Do(t *testing.T) {
 		}()
 
 		go func() {
-			err := sr.Do(func() error {
+			err := sr.Do(context.TODO(), func() error {
 				atomic.AddInt32(&done, 1)
 				time.Sleep(time.Millisecond * time.Duration(200))
 				return nil
@@ -102,7 +104,7 @@ func TestSyncRetry_Do(t *testing.T) {
 		sr := NewSyncRetry(&Options{delays})
 		count := 0
 
-		err := sr.Do(func() error {
+		err := sr.Do(context.TODO(), func() error {
 			if count == len(testRetryDelays) {
 				return nil
 			}
@@ -119,7 +121,7 @@ func TestSyncRetry_Do(t *testing.T) {
 		sr := NewSyncRetry(&Options{delays})
 		count := 0
 
-		err := sr.Do(func() error {
+		err := sr.Do(context.TODO(), func() error {
 			count++
 			return RetryError
 		})
@@ -139,7 +141,7 @@ func TestSyncRetry_Do(t *testing.T) {
 
 		go func() {
 			count := 0
-			err := sr.Do(func() error {
+			err := sr.Do(context.TODO(), func() error {
 				count++
 				atomic.AddInt32(&firstFuncCalls, 1)
 				if count != 2 {
@@ -153,7 +155,7 @@ func TestSyncRetry_Do(t *testing.T) {
 
 		go func() {
 			count := 0
-			err := sr.Do(func() error {
+			err := sr.Do(context.TODO(), func() error {
 				count++
 				atomic.AddInt32(&secondFuncCalls, 1)
 				if count != 2 {
@@ -186,7 +188,7 @@ func TestSyncRetry_Do(t *testing.T) {
 
 		go func() {
 			count := 0
-			err := sr.Do(func() error {
+			err := sr.Do(context.TODO(), func() error {
 				count++
 				atomic.AddInt32(&firstFuncCalls, 1)
 				return RetryError
@@ -197,7 +199,7 @@ func TestSyncRetry_Do(t *testing.T) {
 
 		go func() {
 			count := 0
-			err := sr.Do(func() error {
+			err := sr.Do(context.TODO(), func() error {
 				count++
 				atomic.AddInt32(&secondFuncCalls, 1)
 				return RetryError
