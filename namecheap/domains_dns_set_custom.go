@@ -1,6 +1,7 @@
 package namecheap
 
 import (
+	"context"
 	"encoding/xml"
 	"fmt"
 	"strings"
@@ -32,7 +33,7 @@ func (d DomainsDNSSetCustomResult) String() string {
 // NOTE: Services like URL forwarding, Email forwarding, Dynamic DNS will not work for domains using custom nameservers
 //
 // Namecheap doc: https://www.namecheap.com/support/api/methods/domains-dns/set-custom/
-func (dds *DomainsDNSService) SetCustom(domain string, nameservers []string) (*DomainsDNSSetCustomCommandResponse, error) {
+func (dds *DomainsDNSService) SetCustom(ctx context.Context, domain string, nameservers []string) (*DomainsDNSSetCustomCommandResponse, error) {
 	var response DomainsDNSSetCustomResponse
 
 	params := map[string]string{
@@ -54,7 +55,7 @@ func (dds *DomainsDNSService) SetCustom(domain string, nameservers []string) (*D
 
 	params["Nameservers"] = *nameserversString
 
-	_, err = dds.client.DoXML(params, &response)
+	_, err = dds.client.DoXML(ctx, params, &response)
 	if err != nil {
 		return nil, err
 	}

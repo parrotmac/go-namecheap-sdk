@@ -1,6 +1,7 @@
 package namecheap
 
 import (
+	"context"
 	"encoding/xml"
 	"fmt"
 )
@@ -35,7 +36,7 @@ func (d DomainDNSGetListResult) String() string {
 // GetList gets a list of DNS servers associated with the requested domain
 //
 // Namecheap doc: https://www.namecheap.com/support/api/methods/domains-dns/get-list/
-func (dds *DomainsDNSService) GetList(domain string) (*DomainsDNSGetListCommandResponse, error) {
+func (dds *DomainsDNSService) GetList(ctx context.Context, domain string) (*DomainsDNSGetListCommandResponse, error) {
 	var response DomainsDNSGetListResponse
 
 	params := map[string]string{
@@ -50,7 +51,7 @@ func (dds *DomainsDNSService) GetList(domain string) (*DomainsDNSGetListCommandR
 	params["SLD"] = parsedDomain.SLD
 	params["TLD"] = parsedDomain.TLD
 
-	_, err = dds.client.DoXML(params, &response)
+	_, err = dds.client.DoXML(ctx, params, &response)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +63,7 @@ func (dds *DomainsDNSService) GetList(domain string) (*DomainsDNSGetListCommandR
 		}
 
 		var domainInfo *DomainsGetInfoCommandResponse
-		domainInfo, err = dds.client.Domains.GetInfo(domain)
+		domainInfo, err = dds.client.Domains.GetInfo(context.TODO(), domain)
 		if err != nil {
 			return nil, err
 		}

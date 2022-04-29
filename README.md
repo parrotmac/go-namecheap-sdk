@@ -15,10 +15,12 @@ $ go get github.com/namecheap/go-namecheap-sdk/v2
 
 ```go
 import (
+    "context"
+
     "github.com/namecheap/go-namecheap-sdk/v2"
 )
 
-client := NewClient(&ClientOptions{
+client := namecheap.NewClient(&namecheap.ClientOptions{
     UserName:   "UserName",
     ApiUser:    "ApiUser",
     ApiKey:     "ApiKey",
@@ -26,7 +28,7 @@ client := NewClient(&ClientOptions{
     UseSandbox: false,
 })
 
-setHostsResp, err := client.DomainsDNS.SetHosts(&namecheap.DomainsDNSSetHostsArgs{
+setHostsResp, err := client.DomainsDNS.SetHosts(context.TODO(), &namecheap.DomainsDNSSetHostsArgs{
     Domain: namecheap.String("domain.com"),
     Records: &[]namecheap.DomainsDNSHostRecord{
         {

@@ -1,12 +1,14 @@
 package namecheap
 
 import (
-	"github.com/stretchr/testify/assert"
+	"context"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -70,7 +72,7 @@ func TestNewClient(t *testing.T) {
 func TestNewRequest(t *testing.T) {
 	client := setupClient(nil)
 
-	request, err := client.NewRequest(map[string]string{
+	request, err := client.NewRequest(context.TODO(), map[string]string{
 		"Command": "command",
 	})
 

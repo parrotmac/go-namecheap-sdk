@@ -2,17 +2,19 @@ package namecheap
 
 import (
 	"bytes"
+	"context"
 	"encoding/xml"
 	"errors"
 	"fmt"
-	"github.com/hashicorp/go-cleanhttp"
-	"github.com/namecheap/go-namecheap-sdk/v2/namecheap/internal/syncretry"
-	"github.com/weppos/publicsuffix-go/publicsuffix"
 	"io"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strconv"
+
+	"github.com/hashicorp/go-cleanhttp"
+	"github.com/namecheap/go-namecheap-sdk/v2/namecheap/internal/syncretry"
+	"github.com/weppos/publicsuffix-go/publicsuffix"
 )
 
 const (
@@ -66,7 +68,7 @@ func NewClient(options *ClientOptions) *Client {
 }
 
 // NewRequest creates a new request with the params
-func (c *Client) NewRequest(body map[string]string) (*http.Request, error) {
+func (c *Client) NewRequest(ctx context.Context, body map[string]string) (*http.Request, error) {
 	u, err := url.Parse(c.BaseURL)
 
 	if err != nil {
@@ -81,7 +83,7 @@ func (c *Client) NewRequest(body map[string]string) (*http.Request, error) {
 	rBody := encodeBody(body)
 
 	// Build the request
-	req, err := http.NewRequest("POST", u.String(), bytes.NewBufferString(rBody))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, u.String(), bytes.NewBufferString(rBody))
 
 	if err != nil {
 		return nil, fmt.Errorf("Error creating request: %s", err)
@@ -93,10 +95,10 @@ func (c *Client) NewRequest(body map[string]string) (*http.Request, error) {
 	return req, nil
 }
 
-func (c *Client) DoXML(body map[string]string, obj interface{}) (*http.Response, error) {
+func (c *Client) DoXML(ctx context.Context, body map[string]string, obj interface{}) (*http.Response, error) {
 	var requestResponse *http.Response
 	err := c.sr.Do(func() error {
-		request, err := c.NewRequest(body)
+		request, err := c.NewRequest(ctx, body)
 		if err != nil {
 			return err
 		}

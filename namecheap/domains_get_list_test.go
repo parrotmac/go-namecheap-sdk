@@ -1,13 +1,15 @@
 package namecheap
 
 import (
-	"github.com/stretchr/testify/assert"
+	"context"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDomainsGetList(t *testing.T) {
@@ -48,7 +50,7 @@ func TestDomainsGetList(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.Domains.GetList(&DomainsGetListArgs{})
+		_, err := client.Domains.GetList(context.TODO(), &DomainsGetListArgs{})
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
 		}
@@ -70,7 +72,7 @@ func TestDomainsGetList(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.Domains.GetList(&DomainsGetListArgs{
+		_, err := client.Domains.GetList(context.TODO(), &DomainsGetListArgs{
 			ListType:   String("EXPIRING"),
 			SearchTerm: String("search.com"),
 			Page:       Int(2),
@@ -102,7 +104,7 @@ func TestDomainsGetList(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.Domains.GetList(nil)
+		_, err := client.Domains.GetList(context.TODO(), nil)
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
 		}
@@ -123,7 +125,7 @@ func TestDomainsGetList(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.Domains.GetList(&DomainsGetListArgs{
+		_, err := client.Domains.GetList(context.TODO(), &DomainsGetListArgs{
 			Page: Int(-1),
 		})
 
@@ -139,7 +141,7 @@ func TestDomainsGetList(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.Domains.GetList(&DomainsGetListArgs{
+		_, err := client.Domains.GetList(context.TODO(), &DomainsGetListArgs{
 			PageSize: Int(3),
 		})
 
@@ -155,7 +157,7 @@ func TestDomainsGetList(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.Domains.GetList(&DomainsGetListArgs{
+		_, err := client.Domains.GetList(context.TODO(), &DomainsGetListArgs{
 			PageSize: Int(999),
 		})
 
@@ -171,7 +173,7 @@ func TestDomainsGetList(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		response, err := client.Domains.GetList(&DomainsGetListArgs{})
+		response, err := client.Domains.GetList(context.TODO(), &DomainsGetListArgs{})
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
 		}
@@ -220,7 +222,7 @@ func TestDomainsGetList(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		response, err := client.Domains.GetList(&DomainsGetListArgs{})
+		response, err := client.Domains.GetList(context.TODO(), &DomainsGetListArgs{})
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
 		}
@@ -263,7 +265,7 @@ func TestDomainsGetList(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		response, err := client.Domains.GetList(&DomainsGetListArgs{})
+		response, err := client.Domains.GetList(context.TODO(), &DomainsGetListArgs{})
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
 		}
@@ -282,7 +284,7 @@ func TestDomainsGetList(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.Domains.GetList(nil)
+		_, err := client.Domains.GetList(context.TODO(), nil)
 
 		assert.EqualError(t, err, "unable to parse server response: EOF")
 	})
@@ -298,7 +300,7 @@ func TestDomainsGetList(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.Domains.GetList(nil)
+		_, err := client.Domains.GetList(context.TODO(), nil)
 
 		assert.EqualError(t, err, "unable to parse server response: EOF")
 	})
@@ -314,7 +316,7 @@ func TestDomainsGetList(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.Domains.GetList(nil)
+		_, err := client.Domains.GetList(context.TODO(), nil)
 
 		assert.EqualError(t, err, "unable to parse server response: expected element type <ApiResponse> but have <broken>")
 	})
@@ -342,7 +344,7 @@ func TestDomainsGetList(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.Domains.GetList(nil)
+		_, err := client.Domains.GetList(context.TODO(), nil)
 
 		assert.EqualError(t, err, "Invalid Address (2050900)")
 	})

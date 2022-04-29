@@ -1,7 +1,7 @@
 package namecheap
 
 import (
-	"github.com/stretchr/testify/assert"
+	"context"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDomainsDNSSetCustom(t *testing.T) {
@@ -41,7 +43,7 @@ func TestDomainsDNSSetCustom(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.DomainsDNS.SetCustom("domain.net", fakeNameservers)
+		_, err := client.DomainsDNS.SetCustom(context.TODO(), "domain.net", fakeNameservers)
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
 		}
@@ -63,7 +65,7 @@ func TestDomainsDNSSetCustom(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.DomainsDNS.SetCustom("domain.net", fakeNameservers)
+		_, err := client.DomainsDNS.SetCustom(context.TODO(), "domain.net", fakeNameservers)
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
 		}
@@ -86,7 +88,7 @@ func TestDomainsDNSSetCustom(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		_, err := client.DomainsDNS.SetCustom("domain.net", fakeNameservers)
+		_, err := client.DomainsDNS.SetCustom(context.TODO(), "domain.net", fakeNameservers)
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
 		}
@@ -105,7 +107,7 @@ func TestDomainsDNSSetCustom(t *testing.T) {
 		client := setupClient(nil)
 		client.BaseURL = mockServer.URL
 
-		result, err := client.DomainsDNS.SetCustom("domain.net", fakeNameservers)
+		result, err := client.DomainsDNS.SetCustom(context.TODO(), "domain.net", fakeNameservers)
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
 		}
@@ -131,7 +133,7 @@ func TestDomainsDNSSetCustom(t *testing.T) {
 			client := setupClient(nil)
 			client.BaseURL = mockServer.URL
 
-			_, err := client.DomainsDNS.SetCustom("domain.net", errorCase.Nameservers)
+			_, err := client.DomainsDNS.SetCustom(context.TODO(), "domain.net", errorCase.Nameservers)
 
 			assert.EqualError(t, err, "invalid nameservers: must contain minimum two items")
 		})

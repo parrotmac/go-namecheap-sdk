@@ -1,6 +1,7 @@
 package namecheap
 
 import (
+	"context"
 	"encoding/xml"
 	"fmt"
 	"regexp"
@@ -99,7 +100,7 @@ func (d DomainDNSSetHostsResult) String() string {
 // SetHosts sets DNS host records settings for the requested domain
 //
 // Namecheap doc: https://www.namecheap.com/support/api/methods/domains-dns/set-hosts/
-func (dds DomainsDNSService) SetHosts(args *DomainsDNSSetHostsArgs) (*DomainsDNSSetHostsCommandResponse, error) {
+func (dds DomainsDNSService) SetHosts(ctx context.Context, args *DomainsDNSSetHostsArgs) (*DomainsDNSSetHostsCommandResponse, error) {
 	var response DomainsDNSSetHostsResponse
 
 	params := map[string]string{
@@ -123,7 +124,7 @@ func (dds DomainsDNSService) SetHosts(args *DomainsDNSSetHostsArgs) (*DomainsDNS
 		params[k] = v
 	}
 
-	_, err = dds.client.DoXML(params, &response)
+	_, err = dds.client.DoXML(ctx, params, &response)
 	if err != nil {
 		return nil, err
 	}

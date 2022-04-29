@@ -1,6 +1,7 @@
 package namecheap
 
 import (
+	"context"
 	"encoding/xml"
 	"fmt"
 )
@@ -46,7 +47,7 @@ func (d DomainsDNSHostRecordDetailed) String() string {
 // GetHosts retrieves DNS host record settings for the requested domain.
 //
 // Namecheap doc: https://www.namecheap.com/support/api/methods/domains-dns/get-hosts/
-func (dds *DomainsDNSService) GetHosts(domain string) (*DomainsDNSGetHostsCommandResponse, error) {
+func (dds *DomainsDNSService) GetHosts(ctx context.Context, domain string) (*DomainsDNSGetHostsCommandResponse, error) {
 	var response DomainsDNSGetHostsResponse
 
 	params := map[string]string{
@@ -61,7 +62,7 @@ func (dds *DomainsDNSService) GetHosts(domain string) (*DomainsDNSGetHostsComman
 	params["SLD"] = parsedDomain.SLD
 	params["TLD"] = parsedDomain.TLD
 
-	_, err = dds.client.DoXML(params, &response)
+	_, err = dds.client.DoXML(ctx, params, &response)
 	if err != nil {
 		return nil, err
 	}
