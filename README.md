@@ -29,22 +29,26 @@ client := namecheap.NewClient(&namecheap.ClientOptions{
 })
 
 setHostsResp, err := client.DomainsDNS.SetHosts(context.TODO(), &namecheap.DomainsDNSSetHostsArgs{
-    Domain: namecheap.String("domain.com"),
+    Domain: "domain.com",
     Records: &[]namecheap.DomainsDNSHostRecord{
         {
-            HostName:   namecheap.String("blog"),
-            RecordType: namecheap.String("A"),
-            Address:    namecheap.String("11.12.13.14"),
+            HostName:   "blog",
+            RecordType: "A",
+            Address:    "11.12.13.14",
         },
     },
 })
 
 // ...
 
-response, err := client.DomainsDNS.GetHosts("domain.com")
+response, err := client.DomainsDNS.GetHosts(context.TODO(), "domain.com")
 
 // ...
 ```
+
+### Examples
+
+Examples are available under the [`examples/`](examples/) directory.
 
 ### Sandbox
 
