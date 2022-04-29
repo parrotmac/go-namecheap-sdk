@@ -84,7 +84,7 @@ func TestDomainsDNSSetDefault(t *testing.T) {
 			t.Fatal("Unable to get domains", err)
 		}
 
-		assert.Equal(t, "domain.net", *result.DomainDNSSetDefaultResult.Domain)
-		assert.Equal(t, true, *result.DomainDNSSetDefaultResult.Updated)
+		assert.Equal(t, "domain.net", result.DomainDNSSetDefaultResult.Domain)
+		assert.Equal(t, true, result.DomainDNSSetDefaultResult.Updated)
 	})
 }
