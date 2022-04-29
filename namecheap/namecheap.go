@@ -7,10 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/go-cleanhttp"
 	"github.com/namecheap/go-namecheap-sdk/v2/namecheap/internal/syncretry"
@@ -38,12 +41,44 @@ type Client struct {
 	ClientOptions *ClientOptions
 	BaseURL       string
 
-	Domains    *DomainsService
-	DomainsDNS *DomainsDNSService
+	Domains    DomainsService
+	DomainsDNS DomainsDNSService
 }
 
 type service struct {
 	client *Client
+}
+
+func LookupClientIP(ctx context.Context) (string, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://ipv4.icanhazip.com", nil)
+	if err != nil {
+		return "", fmt.Errorf("failed to build HTTP request %v", err)
+	}
+
+	c := cleanhttp.DefaultClient()
+
+	resp, err := c.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("failed to fetch external IP %v", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("did not get OK status when looking up external IP: %d/%s", resp.StatusCode, resp.Status)
+	}
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read response body when looking up external IP: %v", err)
+	}
+	return strings.TrimSpace(string(respBody)), nil
+}
+
+func NewClientOptionsFromEnv(clientIP string) *ClientOptions {
+	return &ClientOptions{
+		UserName:   os.Getenv("NAMECHEAP_USERNAME"),
+		ApiUser:    os.Getenv("NAMECHEAP_API_USER"),
+		ApiKey:     os.Getenv("NAMECHEAP_API_KEY"),
+		ClientIp:   clientIP,
+		UseSandbox: strings.ToLower(os.Getenv("NAMECHEAP_USE_SANDBOX")) != "false",
+	}
 }
 
 // NewClient returns a new Namecheap API Client
@@ -54,15 +89,14 @@ func NewClient(options *ClientOptions) *Client {
 		sr:            syncretry.NewSyncRetry(&syncretry.Options{Delays: []int{1, 5, 15, 30, 50}}),
 	}
 
+	client.BaseURL = namecheapProductionApiUrl
 	if options.UseSandbox {
 		client.BaseURL = namecheapSandboxApiUrl
-	} else {
-		client.BaseURL = namecheapProductionApiUrl
 	}
 
 	client.common.client = client
-	client.Domains = (*DomainsService)(&client.common)
-	client.DomainsDNS = (*DomainsDNSService)(&client.common)
+	client.Domains = (DomainsService)(client.common)
+	client.DomainsDNS = (DomainsDNSService)(client.common)
 
 	return client
 }
@@ -164,18 +198,6 @@ func ParseDomain(domain string) (*publicsuffix.DomainName, error) {
 
 	return parsedDomain, nil
 }
-
-// Bool is a helper routine that allocates a new bool value
-// to store v and returns a pointer to it.
-func Bool(v bool) *bool { return &v }
-
-// Int is a helper routine that allocates a new int value
-// to store v and returns a pointer to it.
-func Int(v int) *int { return &v }
-
-// String is a helper routine that allocates a new string value
-// to store v and returns a pointer to it.
-func String(v string) *string { return &v }
 
 // UInt8 is a helper routine that allocates a new uint8 value
 // to store v and returns a pointer to it.

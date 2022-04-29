@@ -44,7 +44,7 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client.BaseURL = mockServer.URL
 
 		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
-			Domain: String("domain.net"),
+			Domain: "domain.net",
 		})
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
@@ -68,10 +68,10 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client.BaseURL = mockServer.URL
 
 		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
-			Domain:    String("domain.net"),
-			EmailType: String(EmailTypeForward),
+			Domain:    "domain.net",
+			EmailType: EmailTypeForward,
 			Flag:      UInt8(100),
-			Tag:       String("issue"),
+			Tag:       "issue",
 		})
 		if err != nil {
 			t.Fatal("Unable to get domains", err)
@@ -99,20 +99,20 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client.BaseURL = mockServer.URL
 
 		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
-			Domain:    String("domain.net"),
-			EmailType: String("MX"),
-			Records: &[]DomainsDNSHostRecord{
+			Domain:    "domain.net",
+			EmailType: "MX",
+			Records: []DomainsDNSHostRecord{
 				{
-					RecordType: String(RecordTypeA),
-					HostName:   String("@"),
-					Address:    String("10.11.12.13"),
-					TTL:        Int(1800),
+					RecordType: RecordTypeA,
+					HostName:   "@",
+					Address:    "10.11.12.13",
+					TTL:        1800,
 				},
 				{
-					RecordType: String(RecordTypeMX),
-					HostName:   String("mail"),
-					Address:    String("super-mail.com"),
-					TTL:        Int(1800),
+					RecordType: RecordTypeMX,
+					HostName:   "mail",
+					Address:    "super-mail.com",
+					TTL:        1800,
 					MXPref:     UInt8(10),
 				},
 			},
@@ -148,14 +148,14 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client.BaseURL = mockServer.URL
 
 		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
-			Domain:    String("domain.net"),
-			EmailType: String(EmailTypeMXE),
-			Records: &[]DomainsDNSHostRecord{
+			Domain:    "domain.net",
+			EmailType: EmailTypeMXE,
+			Records: []DomainsDNSHostRecord{
 				{
-					RecordType: String(RecordTypeMXE),
-					HostName:   String("mail"),
-					Address:    String("10.11.12.13"),
-					TTL:        Int(1800),
+					RecordType: RecordTypeMXE,
+					HostName:   "mail",
+					Address:    "10.11.12.13",
+					TTL:        1800,
 					MXPref:     UInt8(10),
 				},
 			},
@@ -186,12 +186,12 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client.BaseURL = mockServer.URL
 
 		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
-			Domain: String("domain.net"),
-			Records: &[]DomainsDNSHostRecord{
+			Domain: "domain.net",
+			Records: []DomainsDNSHostRecord{
 				{
-					RecordType: String(RecordTypeURL),
-					HostName:   String("redirect"),
-					Address:    String("https://domain.com"),
+					RecordType: RecordTypeURL,
+					HostName:   "redirect",
+					Address:    "https://domain.com",
 				},
 			},
 		})
@@ -219,12 +219,12 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client.BaseURL = mockServer.URL
 
 		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
-			Domain: String("domain.net"),
-			Records: &[]DomainsDNSHostRecord{
+			Domain: "domain.net",
+			Records: []DomainsDNSHostRecord{
 				{
-					RecordType: String(RecordTypeURL301),
-					HostName:   String("redirect"),
-					Address:    String("https://domain.com"),
+					RecordType: RecordTypeURL301,
+					HostName:   "redirect",
+					Address:    "https://domain.com",
 				},
 			},
 		})
@@ -252,12 +252,12 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client.BaseURL = mockServer.URL
 
 		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
-			Domain: String("domain.net"),
-			Records: &[]DomainsDNSHostRecord{
+			Domain: "domain.net",
+			Records: []DomainsDNSHostRecord{
 				{
-					RecordType: String(RecordTypeFrame),
-					HostName:   String("redirect"),
-					Address:    String("https://domain.com"),
+					RecordType: RecordTypeFrame,
+					HostName:   "redirect",
+					Address:    "https://domain.com",
 				},
 			},
 		})
@@ -285,12 +285,12 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		client.BaseURL = mockServer.URL
 
 		_, err := client.DomainsDNS.SetHosts(context.TODO(), &DomainsDNSSetHostsArgs{
-			Domain: String("domain.net"),
-			Records: &[]DomainsDNSHostRecord{
+			Domain: "domain.net",
+			Records: []DomainsDNSHostRecord{
 				{
-					RecordType: String(RecordTypeCAA),
-					HostName:   String("@"),
-					Address:    String("0 iodef http://domain.com"),
+					RecordType: RecordTypeCAA,
+					HostName:   "@",
+					Address:    "0 iodef http://domain.com",
 				},
 			},
 		})
@@ -311,32 +311,32 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_incorrect_domain",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("dom"),
+				Domain: "dom",
 			},
 			ExpectedError: "invalid domain: incorrect format",
 		},
 		{
 			Name: "request_data_error_bad_email_type",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain:    String("domain.net"),
-				EmailType: String("BAD_TYPE"),
+				Domain:    "domain.net",
+				EmailType: "BAD_TYPE",
 			},
 			ExpectedError: "invalid EmailType value: BAD_TYPE",
 		},
 		{
 			Name: "request_data_error_bad_tag",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("domain.net"),
-				Tag:    String("BAD_TAG"),
+				Domain: "domain.net",
+				Tag:    "BAD_TAG",
 			},
 			ExpectedError: "invalid Tag value: BAD_TAG",
 		},
 		{
 			Name: "request_data_error_no_hostname",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String("CNAME"), Address: String("domain.com")},
+				Domain: "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{RecordType: "CNAME", Address: "domain.com"},
 				},
 			},
 			ExpectedError: "Records[0].HostName is required",
@@ -344,9 +344,9 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_no_recordtype",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{HostName: String("@"), Address: String("domain.com")},
+				Domain: "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{HostName: "@", Address: "domain.com"},
 				},
 			},
 			ExpectedError: "Records[0].RecordType is required",
@@ -354,9 +354,9 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_bad_recordtype",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String("BAD"), HostName: String("@"), Address: String("domain.com")},
+				Domain: "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{RecordType: "BAD", HostName: "@", Address: "domain.com"},
 				},
 			},
 			ExpectedError: "invalid Records[0].RecordType value: BAD",
@@ -364,9 +364,9 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_too_low_ttl",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeCNAME), HostName: String("@"), Address: String("domain.com"), TTL: Int(59)},
+				Domain: "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeCNAME, HostName: "@", Address: "domain.com", TTL: 59},
 				},
 			},
 			ExpectedError: "invalid Records[0].TTL value: 59",
@@ -374,9 +374,9 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_too_big_ttl",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeCNAME), HostName: String("@"), Address: String("domain.com"), TTL: Int(60_001)},
+				Domain: "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeCNAME, HostName: "@", Address: "domain.com", TTL: 60_001},
 				},
 			},
 			ExpectedError: "invalid Records[0].TTL value: 60001",
@@ -384,9 +384,9 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_no_address",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeCNAME), HostName: String("@")},
+				Domain: "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeCNAME, HostName: "@"},
 				},
 			},
 			ExpectedError: "Records[0].Address is required",
@@ -394,10 +394,10 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_email_type_mx_without_records",
 			Args: &DomainsDNSSetHostsArgs{
-				EmailType: String(EmailTypeMX),
-				Domain:    String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeCNAME), HostName: String("@"), Address: String("domain.com"), TTL: Int(1800)},
+				EmailType: EmailTypeMX,
+				Domain:    "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeCNAME, HostName: "@", Address: "domain.com", TTL: 1800},
 				},
 			},
 			ExpectedError: "minimum 1 MX record required for MX EmailType",
@@ -405,10 +405,10 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_email_type_mxe_without_record",
 			Args: &DomainsDNSSetHostsArgs{
-				EmailType: String(EmailTypeMXE),
-				Domain:    String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeCNAME), HostName: String("@"), Address: String("domain.com"), TTL: Int(1800)},
+				EmailType: EmailTypeMXE,
+				Domain:    "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeCNAME, HostName: "@", Address: "domain.com", TTL: 1800},
 				},
 			},
 			ExpectedError: "one MXE record required for MXE EmailType",
@@ -416,20 +416,20 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_email_type_nil_with_mx",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeMX), HostName: String("mail"), Address: String("mail.domain.com"), MXPref: UInt8(10)},
+				Domain: "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeMX, HostName: "mail", Address: "mail.domain.com", MXPref: UInt8(10)},
 				},
 			},
-			ExpectedError: "Records[0].RecordType MX is not allowed for EmailType=nil",
+			ExpectedError: "Records[0].RecordType MX is not allowed for blank EmailType",
 		},
 		{
 			Name: "request_data_error_email_type_fwd_with_mx",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain:    String("domain.net"),
-				EmailType: String(EmailTypeForward),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeMX), HostName: String("mail"), Address: String("mail.domain.com"), MXPref: UInt8(10)},
+				Domain:    "domain.net",
+				EmailType: EmailTypeForward,
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeMX, HostName: "mail", Address: "mail.domain.com", MXPref: UInt8(10)},
 				},
 			},
 			ExpectedError: "Records[0].RecordType MX is not allowed for EmailType=FWD",
@@ -437,20 +437,20 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_email_type_nil_with_mxe",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeMXE), HostName: String("mail"), Address: String("10.11.12.13")},
+				Domain: "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeMXE, HostName: "mail", Address: "10.11.12.13"},
 				},
 			},
-			ExpectedError: "Records[0].RecordType MXE is not allowed for EmailType=nil",
+			ExpectedError: "Records[0].RecordType MXE is not allowed for blank EmailType",
 		},
 		{
 			Name: "request_data_error_email_type_fwd_with_mxe",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain:    String("domain.net"),
-				EmailType: String(EmailTypeForward),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeMXE), HostName: String("mail"), Address: String("10.11.12.13")},
+				Domain:    "domain.net",
+				EmailType: EmailTypeForward,
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeMXE, HostName: "mail", Address: "10.11.12.13"},
 				},
 			},
 			ExpectedError: "Records[0].RecordType MXE is not allowed for EmailType=FWD",
@@ -458,11 +458,11 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_two_mxe_records",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain:    String("domain.net"),
-				EmailType: String(EmailTypeMXE),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeMXE), HostName: String("mail"), Address: String("10.11.12.13")},
-					{RecordType: String(RecordTypeMXE), HostName: String("mail2"), Address: String("10.11.12.14")},
+				Domain:    "domain.net",
+				EmailType: EmailTypeMXE,
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeMXE, HostName: "mail", Address: "10.11.12.13"},
+					{RecordType: RecordTypeMXE, HostName: "mail2", Address: "10.11.12.14"},
 				},
 			},
 			ExpectedError: "one MXE record required for MXE EmailType",
@@ -470,10 +470,10 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_no_mxpref_for_mx_record",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain:    String("domain.net"),
-				EmailType: String(EmailTypeMX),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeMX), HostName: String("mail"), Address: String("mail.domain.com")},
+				Domain:    "domain.net",
+				EmailType: EmailTypeMX,
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeMX, HostName: "mail", Address: "mail.domain.com"},
 				},
 			},
 			ExpectedError: "Records[0].MXPref is nil but required for MX record type",
@@ -481,9 +481,9 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_no_protocol_prefix_for_url_record",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeURL), HostName: String("mail"), Address: String("domain.com")},
+				Domain: "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeURL, HostName: "mail", Address: "domain.com"},
 				},
 			},
 			ExpectedError: `Records[0].Address "domain.com" must contain a protocol prefix for URL record`,
@@ -491,9 +491,9 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_no_protocol_prefix_for_url301_record",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeURL301), HostName: String("mail"), Address: String("domain.com")},
+				Domain: "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeURL301, HostName: "mail", Address: "domain.com"},
 				},
 			},
 			ExpectedError: `Records[0].Address "domain.com" must contain a protocol prefix for URL301 record`,
@@ -501,9 +501,9 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_no_protocol_prefix_for_frame_record",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeFrame), HostName: String("mail"), Address: String("domain.com")},
+				Domain: "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeFrame, HostName: "mail", Address: "domain.com"},
 				},
 			},
 			ExpectedError: `Records[0].Address "domain.com" must contain a protocol prefix for FRAME record`,
@@ -511,9 +511,9 @@ func TestDomainsDNSSetHosts(t *testing.T) {
 		{
 			Name: "request_data_error_no_protocol_prefix_for_caa_iodef_record",
 			Args: &DomainsDNSSetHostsArgs{
-				Domain: String("domain.net"),
-				Records: &[]DomainsDNSHostRecord{
-					{RecordType: String(RecordTypeCAA), HostName: String("@"), Address: String("0 iodef domain.com")},
+				Domain: "domain.net",
+				Records: []DomainsDNSHostRecord{
+					{RecordType: RecordTypeCAA, HostName: "@", Address: "0 iodef domain.com"},
 				},
 			},
 			ExpectedError: `Records[0].Address "0 iodef domain.com" must contain a protocol prefix for CAA iodef record`,
