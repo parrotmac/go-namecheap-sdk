@@ -97,7 +97,7 @@ func (c *Client) NewRequest(ctx context.Context, body map[string]string) (*http.
 
 func (c *Client) DoXML(ctx context.Context, body map[string]string, obj interface{}) (*http.Response, error) {
 	var requestResponse *http.Response
-	err := c.sr.Do(func() error {
+	err := c.sr.Do(ctx, func() error {
 		request, err := c.NewRequest(ctx, body)
 		if err != nil {
 			return err
