@@ -8,7 +8,7 @@
 ### Getting
 
 ```sh
-$ go get github.com/namecheap/go-namecheap-sdk/v2
+$ go get github.com/namecheap/go-namecheap-sdk/v2/namecheap
 ```
 
 ### Usage
@@ -17,7 +17,7 @@ $ go get github.com/namecheap/go-namecheap-sdk/v2
 import (
     "context"
 
-    "github.com/namecheap/go-namecheap-sdk/v2"
+    "github.com/namecheap/go-namecheap-sdk/v2/namecheap"
 )
 
 client := namecheap.NewClient(&namecheap.ClientOptions{
