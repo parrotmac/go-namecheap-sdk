@@ -41,8 +41,9 @@ type Client struct {
 	ClientOptions *ClientOptions
 	BaseURL       string
 
-	Domains    DomainsService
-	DomainsDNS DomainsDNSService
+	Domains      DomainsService
+	DomainsDNS   DomainsDNSService
+	UsersService UsersService
 }
 
 type service struct {
@@ -97,6 +98,7 @@ func NewClient(options *ClientOptions) *Client {
 	client.common.client = client
 	client.Domains = (DomainsService)(client.common)
 	client.DomainsDNS = (DomainsDNSService)(client.common)
+	client.UsersService = (UsersService)(client.common)
 
 	return client
 }
