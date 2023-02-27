@@ -57,5 +57,8 @@ func (ds *DomainsService) Check(ctx context.Context, domainList []string) ([]Dom
 		apiErr = fmt.Errorf("%s", strings.Join(errMessages, "; "))
 	}
 
-	return checkResponse.CommandResponse.DomainCheckResult, apiErr
+	if checkResponse.CommandResponse != nil {
+		return checkResponse.CommandResponse.DomainCheckResult, apiErr
+	}
+	return nil, apiErr
 }
