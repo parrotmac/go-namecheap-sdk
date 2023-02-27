@@ -6,18 +6,10 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 	"time"
 
 	"github.com/namecheap/go-namecheap-sdk/v2/namecheap"
-)
-
-var (
-	username   = os.Getenv("NAMECHEAP_USERNAME")
-	apiUser    = os.Getenv("NAMECHEAP_API_USER")
-	apiKey     = os.Getenv("NAMECHEAP_API_KEY")
-	useSandbox = strings.ToLower(os.Getenv("NAMECHEAP_USE_SANDBOX")) != "false"
 )
 
 func main() {
@@ -51,9 +43,8 @@ func main() {
 		if err != nil {
 			log.Fatalln(err)
 		}
-		for _, rec := range dnsRecords.DomainDNSGetListResult.Nameservers {
-			nameservers = append(nameservers, rec)
-		}
+		nameservers = append(nameservers, dnsRecords.DomainDNSGetListResult.Nameservers...)
+
 		fmt.Printf("%s: %s [Auto-Renew: %v] [Expired: %v] [Nameservers: %s]\n", domain.ID, domain.Name, domain.AutoRenew, domain.IsExpired, strings.Join(nameservers, ", "))
 	}
 }
